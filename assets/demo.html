@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Super Pollo · Centro de Control de Seguridad (DEMO)</title>
+<style>
+:root{--bg:#0b1220;--panel:#121b2e;--panel2:#18243b;--line:#243250;--txt:#e8eefc;--mut:#8ea0c4;--acc:#f5a524;--ok:#2fd18b;--warn:#f5a524;--bad:#ff5d6c}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Segoe UI,Calibri,Arial,sans-serif;background:var(--bg);color:var(--txt);height:100vh;display:flex;flex-direction:column;overflow:hidden}
+header{display:flex;align-items:center;gap:16px;padding:10px 20px;background:var(--panel);border-bottom:1px solid var(--line)}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px}
+.logo i{width:34px;height:34px;border-radius:9px;background:var(--acc);display:grid;place-items:center;color:#1b1200;font-style:normal;font-size:19px}
+.demo{margin-left:6px;font-size:11px;letter-spacing:.08em;background:#2a1d00;color:var(--acc);border:1px solid #5b3d00;padding:3px 8px;border-radius:20px}
+nav{display:flex;gap:4px;margin-left:24px}
+nav button{background:none;border:0;color:var(--mut);padding:8px 14px;border-radius:8px;font-size:14px;cursor:pointer}
+nav button.on{background:var(--panel2);color:var(--txt)}
+.right{margin-left:auto;display:flex;gap:18px;align-items:center;color:var(--mut);font-size:13px}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ok);margin-right:6px;box-shadow:0 0 8px var(--ok)}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;padding:14px 20px 0}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 16px}
+.kpi small{color:var(--mut);font-size:12px}
+.kpi b{display:block;font-size:26px;margin-top:2px}
+.kpi span{font-size:12px}
+.ok{color:var(--ok)}.warn{color:var(--warn)}.bad{color:var(--bad)}
+main{flex:1;display:grid;grid-template-columns:230px 1fr 320px;gap:12px;padding:14px 20px 18px;min-height:0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;display:flex;flex-direction:column;min-height:0}
+.card h3{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);padding:12px 14px;border-bottom:1px solid var(--line);font-weight:600}
+.list{overflow:auto;padding:6px}
+.farm{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:9px;cursor:pointer;font-size:14px}
+.farm:hover{background:var(--panel2)}.farm.on{background:var(--panel2);outline:1px solid var(--acc)}
+.farm em{margin-left:auto;white-space:nowrap;font-style:normal;font-size:12px;color:var(--mut)}
+.farm .s{width:9px;height:9px;border-radius:50%;background:var(--ok)}
+.farm .s.w{background:var(--warn)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:10px;padding:10px;flex:1;min-height:0}
+.cam{position:relative;border-radius:8px;overflow:hidden;background:#000;border:1px solid var(--line)}
+.cam canvas{width:100%;height:100%;display:block}
+.cam .tag{position:absolute;left:8px;top:6px;font-size:11px;background:rgba(0,0,0,.55);padding:2px 7px;border-radius:5px}
+.cam .rec{position:absolute;right:8px;top:6px;font-size:11px;color:#ff6b6b;display:flex;align-items:center;gap:5px;background:rgba(0,0,0,.55);padding:2px 7px;border-radius:5px}
+.cam .rec:before{content:"";width:7px;height:7px;border-radius:50%;background:#ff3b3b;animation:b 1s infinite}
+@keyframes b{50%{opacity:.2}}
+.cam .ts{position:absolute;left:8px;bottom:6px;font-size:11px;font-variant-numeric:tabular-nums;background:rgba(0,0,0,.55);padding:2px 7px;border-radius:5px}
+.cam.alert{border-color:var(--bad);box-shadow:0 0 0 2px rgba(255,93,108,.35)}
+.cam .box{position:absolute;border:2px solid var(--bad);color:var(--bad);font-size:10px;display:none}
+.cam.alert .box{display:block}
+.ev{display:flex;gap:10px;padding:10px;border-bottom:1px solid var(--line);font-size:13px}
+.ev:last-child{border:0}.ev .i{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;flex:none;font-size:14px}
+.ev .i.r{background:#3a141a}.ev .i.y{background:#3a2a0b}.ev .i.g{background:#0f2f26}
+.ev small{display:block;color:var(--mut);margin-top:2px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;color:var(--mut);font-weight:600;padding:10px 12px;font-size:12px;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--line)}
+td{padding:10px 12px;border-bottom:1px solid var(--line)}
+.pill{padding:2px 9px;border-radius:20px;font-size:12px}
+.pill.g{background:#0f2f26;color:var(--ok)}.pill.r{background:#3a141a;color:var(--bad)}.pill.y{background:#3a2a0b;color:var(--warn)}
+.view{display:none;flex:1;min-height:0}.view.on{display:flex;flex-direction:column}
+.pad{padding:0;overflow:auto}
+.sens{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:10px}
+.sens div{background:var(--panel2);border-radius:10px;padding:12px}
+.sens small{color:var(--mut);font-size:12px}.sens b{display:block;font-size:22px;margin-top:4px}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo"><i>🐔</i> SUPER POLLO <span style="color:var(--mut);font-weight:400">· Centro de Control de Seguridad</span></div>
+  <span class="demo">DEMO · DATOS SIMULADOS</span>
+  <nav>
+    <button class="on" data-v="v1">Videovigilancia</button>
+    <button data-v="v2">Control de acceso</button>
+    <button data-v="v3">Sensores</button>
+  </nav>
+  <div class="right"><span><span class="dot"></span>Sistema en línea</span><span id="clock"></span><span>👤 Admin · Seguridad</span></div>
+</header>
+
+<section class="kpis">
+  <div class="kpi"><small>Granjas conectadas</small><b>10 / 10</b><span class="ok">● Todas en línea</span></div>
+  <div class="kpi"><small>Cámaras activas</small><b id="k1">100 / 100</b><span class="ok">● Grabando</span></div>
+  <div class="kpi"><small>Accesos hoy</small><b id="k2">1,842</b><span class="mut" style="color:var(--mut)">Verificación huella + cara</span></div>
+  <div class="kpi"><small>Alertas (24 h)</small><b id="k3" class="warn">7</b><span class="warn">● 2 sin revisar</span></div>
+  <div class="kpi"><small>Almacenamiento</small><b>68 %</b><span style="color:var(--mut)">≈ 38 días de video</span></div>
+</section>
+
+<main>
+  <div class="card">
+    <h3>Granjas</h3>
+    <div class="list" id="farms"></div>
+  </div>
+
+  <div class="card">
+    <div class="view on" id="v1">
+      <h3 id="ftitle">Granja Tula · Vista en vivo</h3>
+      <div class="grid" id="grid"></div>
+    </div>
+    <div class="view" id="v2">
+      <h3>Registro de accesos · tiempo real</h3>
+      <div class="pad"><table>
+        <thead><tr><th>Hora</th><th>Empleado</th><th>Área</th><th>Huella</th><th>Rostro</th><th>Resultado</th></tr></thead>
+        <tbody id="acc"></tbody></table></div>
+    </div>
+    <div class="view" id="v3">
+      <h3>Sensores de la granja</h3>
+      <div class="sens">
+        <div><small>Temperatura nave 1</small><b>26.4 °C</b></div>
+        <div><small>Humedad nave 1</small><b>58 %</b></div>
+        <div><small>Puerta principal</small><b class="ok">Cerrada</b></div>
+        <div><small>Energía</small><b class="ok">Red CFE</b></div>
+        <div><small>Temperatura nave 2</small><b>27.1 °C</b></div>
+        <div><small>Humedad nave 2</small><b>61 %</b></div>
+        <div><small>Puerta bodega</small><b class="warn">Abierta 4 min</b></div>
+        <div><small>UPS</small><b class="ok">100 %</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Alertas recientes</h3>
+    <div class="list" id="evs" style="padding:0"></div>
+  </div>
+</main>
+
+<script>
+const N=["Granja Tula","Granja Tizayuca","Granja Actopan","Granja Ixmiquilpan","Granja Tulancingo","Granja Apan","Granja Huichapan","Granja Zimapán","Granja Mixquiahuala","Granja Progreso"];
+const names=["Acceso principal","Perímetro norte","Perímetro sur","Nave 1","Nave 2","Bodega alimento","Báscula","Patio carga","Oficina"];
+let cur=0;
+const farms=document.getElementById('farms');
+N.forEach((n,i)=>{const d=document.createElement('div');d.className='farm'+(i==0?' on':'');d.innerHTML=`<span class="s ${i==3?'w':''}"></span>${n}<em>10 📷</em>`;d.onclick=()=>{cur=i;document.querySelectorAll('.farm').forEach(x=>x.classList.remove('on'));d.classList.add('on');document.getElementById('ftitle').textContent=n+' · Vista en vivo'};farms.appendChild(d)});
+// camera tiles
+const grid=document.getElementById('grid');const cams=[];
+names.forEach((nm,i)=>{const c=document.createElement('div');c.className='cam';c.innerHTML=`<canvas width="480" height="270"></canvas><span class="tag">CAM ${String(i+1).padStart(2,'0')} · ${nm}</span><span class="rec">REC</span><span class="ts"></span><span class="box"><b>PERSONA 94%</b></span>`;grid.appendChild(c);cams.push({el:c,cv:c.querySelector('canvas'),seed:i*7+3,ts:c.querySelector('.ts'),box:c.querySelector('.box')})});
+function rnd(s){s=Math.sin(s)*10000;return s-Math.floor(s)}
+function draw(c,t){const ctx=c.cv.getContext('2d'),W=480,H=270,s=c.seed;
+  const night=(s%2==0);
+  ctx.fillStyle=night?'#0c1a12':'#3a4650';ctx.fillRect(0,0,W,H);
+  // ground
+  const g=ctx.createLinearGradient(0,H*.55,0,H);g.addColorStop(0,night?'#10241a':'#58614f');g.addColorStop(1,night?'#07120c':'#2d3328');ctx.fillStyle=g;ctx.fillRect(0,H*.55,W,H*.45);
+  // sky
+  const sk=ctx.createLinearGradient(0,0,0,H*.55);sk.addColorStop(0,night?'#06100b':'#8fa3b3');sk.addColorStop(1,night?'#0d1d15':'#b9c5ce');ctx.fillStyle=sk;ctx.fillRect(0,0,W,H*.55);
+  // sheds
+  const k=2+(s%3);for(let i=0;i<k;i++){const x=20+i*(W/k)+rnd(s+i)*20,w=W/k-40,y=H*.35+rnd(s*2+i)*20;ctx.fillStyle=night?'#16322a':'#7b8691';ctx.fillRect(x,y,w,H*.3);ctx.fillStyle=night?'#1d4235':'#97a3ad';ctx.beginPath();ctx.moveTo(x-6,y);ctx.lineTo(x+w/2,y-26);ctx.lineTo(x+w+6,y);ctx.fill();ctx.fillStyle=night?'#0a1812':'#4b555e';ctx.fillRect(x+w*.4,y+H*.1,w*.2,H*.2)}
+  // fence
+  ctx.strokeStyle=night?'#2c5a47':'#555';ctx.lineWidth=1;for(let x=0;x<W;x+=14){ctx.beginPath();ctx.moveTo(x,H*.62);ctx.lineTo(x,H*.78);ctx.stroke()}ctx.beginPath();ctx.moveTo(0,H*.66);ctx.lineTo(W,H*.66);ctx.moveTo(0,H*.74);ctx.lineTo(W,H*.74);ctx.stroke();
+  // moving vehicle/person
+  const px=((t/40+s*60)%(W+80))-40;ctx.fillStyle=night?'#6fe3b0':'#222';ctx.fillRect(px,H*.8,6,16);ctx.beginPath();ctx.arc(px+3,H*.8-3,3.5,0,7);ctx.fill();
+  c.px=px;
+  // noise
+  ctx.globalAlpha=.06;for(let i=0;i<260;i++){ctx.fillStyle='#fff';ctx.fillRect(Math.random()*W,Math.random()*H,2,1)}ctx.globalAlpha=1;
+  if(night){ctx.fillStyle='rgba(30,255,140,.05)';ctx.fillRect(0,0,W,H)}
+}
+function tick(){const t=performance.now();const d=new Date();document.getElementById('clock').textContent=d.toLocaleDateString('es-MX')+' '+d.toLocaleTimeString('es-MX');
+  cams.forEach((c,i)=>{draw(c,t);c.ts.textContent=d.toLocaleDateString('es-MX')+' '+d.toLocaleTimeString('es-MX')
+    if(c.el.classList.contains('alert')){c.box.style.left=((c.px/480)*100-3)+'%';c.box.style.top='72%';c.box.style.width='9%';c.box.style.height='24%'}})
+  requestAnimationFrame(tick)}
+tick();
+cams[5].el.classList.add('alert');
+// events
+const evs=[
+ ['r','🚨','Intrusión · Perímetro sur','Granja Apan · CAM 03 · hace 2 min'],
+ ['y','🚪','Puerta bodega abierta > 4 min','Granja Ixmiquilpan · hace 9 min'],
+ ['r','🪪','Acceso denegado · fuera de turno','Granja Tula · Acceso principal · hace 14 min'],
+ ['g','✅','Cámara reconectada','Granja Huichapan · CAM 07 · hace 31 min'],
+ ['y','🔌','Cambio a UPS (falla de energía 3 min)','Granja Zimapán · hace 52 min'],
+ ['r','🧍','Persona detectada fuera de horario','Granja Tulancingo · CAM 02 · hace 1 h']
+];
+const E=document.getElementById('evs');evs.forEach(e=>{const d=document.createElement('div');d.className='ev';d.innerHTML=`<div class="i ${e[0]}">${e[1]}</div><div><b>${e[2]}</b><small>${e[3]}</small></div>`;E.appendChild(d)});
+// access table
+const emp=["Luis Hernández","María Cruz","José Ramírez","Ana Torres","Carlos Mendoza","Rosa Vega","Pedro Salinas","Laura Ortiz","Miguel Ángel Ríos","Sofía Padilla"];
+const areas=["Acceso principal","Nave 1","Nave 2","Bodega","Oficina"];
+const A=document.getElementById('acc');
+function addAcc(){const d=new Date();const bad=Math.random()<.12;const r=Math.random();
+ const tr=document.createElement('tr');
+ const res=bad?(r<.5?['y','Rostro no coincide']:['r','Fuera de turno']):['g','Acceso permitido'];
+ tr.innerHTML=`<td>${d.toLocaleTimeString('es-MX')}</td><td>${emp[Math.floor(Math.random()*emp.length)]}</td><td>${areas[Math.floor(Math.random()*areas.length)]}</td><td>${bad&&r<.5?'✔':'✔'}</td><td>${bad&&r<.5?'✖':'✔'}</td><td><span class="pill ${res[0]}">${res[1]}</span></td>`;
+ A.prepend(tr);while(A.children.length>14)A.lastChild.remove()}
+for(let i=0;i<12;i++)addAcc();setInterval(addAcc,2500);
+// nav
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.remove('on'));b.classList.add('on');document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));document.getElementById(b.dataset.v).classList.add('on')});
+if(location.hash){const b=document.querySelector(`nav button[data-v="${location.hash.slice(1)}"]`);if(b)b.click()}
+</script>
+</body>
+</html>
+

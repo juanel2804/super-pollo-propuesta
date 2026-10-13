@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Super Pollo · Propuestas de Seguridad y Videovigilancia</title>
+<style>
+:root{--bg:#0b1220;--bg2:#101a2e;--card:rgba(255,255,255,.035);--line:rgba(255,255,255,.10);--txt:#e9eef8;--mut:#98a6c2;--red:#d9534f;--blue:#3b66d9;--cy:#7fa8e8;--gold:#d9a441;--ok:#4cb88a}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--txt);font-family:"Segoe UI",system-ui,Arial,sans-serif;overflow-x:hidden}
+canvas#bg{position:fixed;inset:0;z-index:0;width:100%;height:100%}
+.glow{position:fixed;width:60vw;height:60vw;border-radius:50%;filter:blur(140px);opacity:.12;z-index:0;pointer-events:none}
+.g1{background:var(--blue);left:-20vw;top:-20vw}.g2{background:var(--blue);right:-25vw;bottom:-25vw;opacity:.08}
+header{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;gap:20px;padding:12px 4vw;backdrop-filter:blur(14px);background:rgba(5,10,24,.55);border-bottom:1px solid var(--line)}
+header img{height:42px;border-radius:6px}
+header nav{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+header nav a{color:var(--mut);text-decoration:none;font-size:14px;padding:7px 13px;border-radius:20px;transition:.25s}
+header nav a:hover,header nav a.on{color:#fff;background:rgba(255,255,255,.1)}
+section{position:relative;z-index:1;min-height:100vh;padding:110px 6vw 70px;display:flex;flex-direction:column;justify-content:center}
+.kick{color:var(--mut);letter-spacing:.28em;font-size:12px;text-transform:uppercase;margin-bottom:14px}
+h1{font-size:clamp(36px,5.4vw,72px);line-height:1.08;font-weight:700;letter-spacing:-.01em}
+h2{font-size:clamp(28px,3.6vw,46px);line-height:1.12;font-weight:700;margin-bottom:26px;padding-bottom:16px;position:relative}h2:after{content:"";position:absolute;left:0;bottom:0;width:64px;height:3px;background:var(--red)}
+.grad{color:var(--cy)}
+p.lead{font-size:clamp(17px,1.7vw,24px);color:var(--mut);max-width:780px;line-height:1.5;margin-top:22px}
+.reveal{opacity:0;transform:translateY(34px);transition:1s cubic-bezier(.2,.8,.2,1)}
+.reveal.in{opacity:1;transform:none}
+.hero{align-items:flex-start}
+
+@keyframes float{50%{transform:translateY(-10px)}}
+.cta{display:inline-flex;gap:10px;align-items:center;margin-top:34px;padding:14px 26px;border-radius:8px;background:var(--blue);color:#fff;text-decoration:none;font-weight:600;transition:.3s}
+.cta:hover{background:#2f55b8}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:18px;margin-top:40px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:24px;transition:.3s}
+.card:hover{border-color:rgba(127,168,232,.45)}
+.big{font-size:clamp(34px,3.6vw,48px);font-weight:700}
+.mut{color:var(--mut)}
+/* flow */
+.flow{display:flex;align-items:center;gap:0;flex-wrap:wrap;margin-top:20px}
+.node{flex:1;min-width:170px;text-align:center;padding:22px 14px;border-radius:10px;border:1px solid var(--line);background:var(--card);position:relative}
+.node .ic{font-size:38px;display:block;margin-bottom:8px}
+.node b{display:block;font-size:17px}.node small{color:var(--mut)}
+.link{width:64px;height:2px;background:var(--cy);opacity:.8;position:relative;overflow:hidden}
+.link:after{content:"";position:absolute;top:-2px;left:-20px;width:20px;height:6px;border-radius:4px;background:#fff;opacity:.7;animation:pulse 2.4s linear infinite}
+@keyframes pulse{to{left:70px}}
+/* propuestas */
+.tabs{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:26px}
+.tab{cursor:pointer;padding:14px 24px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--mut);font-size:16px;font-weight:600;transition:.3s}
+.tab small{display:block;font-weight:400;font-size:12px;margin-top:2px}
+.tab.on{color:#fff;border-color:var(--c);border-bottom:3px solid var(--c);background:rgba(255,255,255,.08)}
+.panel{display:none;grid-template-columns:1.1fr 1fr;gap:26px}
+.panel.on{display:grid;animation:fade .6s}
+@keyframes fade{from{opacity:0;transform:translateY(14px)}}
+.price{font-size:clamp(38px,4.4vw,60px);font-weight:700;color:var(--c)}
+ul.ck{list-style:none;margin-top:16px}
+ul.ck li{padding:9px 0 9px 34px;position:relative;border-bottom:1px solid var(--line);font-size:17px}
+ul.ck li:before{content:"✓";position:absolute;left:0;top:8px;color:var(--c);font-weight:800;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.08);display:grid;place-items:center;font-size:13px}
+.badge{display:inline-block;padding:5px 14px;border-radius:20px;background:var(--gold);color:#241800;font-weight:800;font-size:12px;letter-spacing:.1em;margin-bottom:10px}
+.rows{margin-top:12px}.rows div{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--line);font-size:15px}
+.rows .t{font-weight:800;font-size:17px;border-bottom:0;color:#fff}
+/* equipo */
+.eq{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px;margin-top:10px}
+.eq .card{padding:18px;display:flex;flex-direction:column}
+.eq .im{height:130px;border-radius:12px;background:#fff;display:grid;place-items:center;margin-bottom:14px;overflow:hidden}
+.eq .im img{max-width:90%;max-height:120px}
+.eq h4{font-size:16px;margin-bottom:3px}.eq small{color:var(--mut)}
+.eq .pr{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:14px}
+.eq .pr b{color:var(--ok);font-size:20px}
+.eq a{color:var(--cy);font-size:13px;text-decoration:none}
+.eq a:hover{text-decoration:underline}
+.qty{background:rgba(255,255,255,.1);padding:2px 9px;border-radius:10px;font-size:13px;margin-left:6px}
+/* demo */
+.demo{border-radius:10px;overflow:hidden;border:1px solid var(--line);position:relative;background:#000}
+.demo iframe{width:100%;height:min(74vh,720px);border:0;display:block}
+
+.demo .bar{display:flex;gap:8px;padding:10px 14px;background:rgba(255,255,255,.06);align-items:center;font-size:13px;color:var(--mut)}
+.demo .bar i{width:11px;height:11px;border-radius:50%;background:#ff5f56;display:inline-block}.demo .bar i:nth-child(2){background:#ffbd2e}.demo .bar i:nth-child(3){background:#27c93f}
+/* comparativa */
+table{width:100%;border-collapse:collapse;margin-top:6px}
+th,td{padding:15px 16px;text-align:center;border-bottom:1px solid var(--line);font-size:16px}
+th{font-size:18px}td:first-child,th:first-child{text-align:left;color:var(--mut)}
+.y{color:var(--ok);font-weight:800}.n{color:#5b6788}
+thead th:nth-child(2){color:var(--ok)}thead th:nth-child(3){color:var(--gold)}thead th:nth-child(4){color:var(--red)}
+.rec{background:linear-gradient(180deg,rgba(255,185,56,.12),transparent)}
+/* calc */
+.calc{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+.sel{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 24px}
+.sel button{padding:11px 18px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--mut);cursor:pointer;font-size:15px;font-weight:700}
+.sel button.on{color:#fff;border-color:var(--cy);background:rgba(127,168,232,.15)}
+input[type=range]{width:100%;accent-color:var(--cy);height:30px}
+.out{font-size:clamp(36px,4.2vw,56px);font-weight:700}
+/* timeline */
+.tl{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;position:relative;margin-top:14px}
+.tl .card{position:relative}.tl .n{width:38px;height:38px;border-radius:50%;background:var(--blue);display:grid;place-items:center;font-weight:800;margin-bottom:12px}
+.tl .w{color:var(--ok);font-weight:700;margin-top:10px;font-size:14px}
+#prv td.y small{color:var(--mut);font-weight:400}#prv td small{display:block;color:var(--mut);font-size:12px;margin-top:2px}#prv td,#prv th{text-align:left}#cam th,#cam td{min-width:130px}.ti{height:90px;background:#fff;border-radius:8px;padding:4px}#cam td{vertical-align:middle;font-size:15px}#cam a{color:var(--cy)}#cam thead th{color:var(--txt)!important}#cam td:not(:first-child){text-align:center}footer{position:relative;z-index:1;text-align:center;padding:40px;color:var(--mut);font-size:13px;border-top:1px solid var(--line)}
+@media(max-width:900px){.panel.on,.calc{grid-template-columns:1fr}.link{width:2px;height:34px}.link:after{display:none}.flow{flex-direction:column}header nav{display:none}}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas><div class="glow g1"></div><div class="glow g2"></div>
+<header>
+  <img src="assets/logo.png" alt="Super Pollo">
+  <nav id="nav">
+    <a href="#inicio">Inicio</a><a href="#reto">El reto</a><a href="#como">Cómo funciona</a><a href="#props">Propuestas</a><a href="#equipo">Equipo</a><a href="#camaras">Cámaras</a><a href="#prov">Proveedores</a><a href="#demo">Demo</a><a href="#comp">Comparativa</a><a href="#calc">Calculadora</a><a href="#plan">Plan</a>
+  </nav>
+</header>
+
+<section id="inicio" class="hero">
+  
+  <div class="kick reveal">Propuesta técnica y económica</div>
+  <h1 class="reveal">Sistema de seguridad,<br>videovigilancia y control de acceso<br><span class="grad">para las granjas de Super Pollo</span></h1>
+  <p class="lead reveal">Tres alternativas de implementación para las 10 granjas: desde videovigilancia esencial hasta un centro de control con acceso biométrico, sensores y alertas en tiempo real.</p>
+  <a class="cta reveal" href="#props">Ver las propuestas</a>
+  <div class="mut reveal" style="margin-top:44px;font-size:14px">Preparado por Juan Elpidio López García · Octubre 2026</div>
+</section>
+
+<section id="reto">
+  <div class="kick reveal">El reto</div>
+  <h2 class="reveal">Ver todo, controlar los accesos <span class="grad">y actuar a tiempo</span></h2>
+  <div class="stats">
+    <div class="card reveal"><div class="big grad" data-n="10">0</div><div class="mut">granjas</div></div>
+    <div class="card reveal"><div class="big grad" data-n="100" data-p="~">0</div><div class="mut">cámaras de videovigilancia</div></div>
+    <div class="card reveal"><div class="big grad" data-n="1000" data-p="~">0</div><div class="mut">empleados por granja</div></div>
+    <div class="card reveal"><div class="big grad">24/7</div><div class="mut">grabación y alertas</div></div>
+  </div>
+  <p class="lead reveal">Prevenir robos, saber quién entra a cada zona y a qué hora, y revisar todo desde un solo lugar. Con internet por Starlink y sin depender de la infraestructura local.</p>
+</section>
+
+<section id="como">
+  <div class="kick reveal">Arquitectura</div>
+  <h2 class="reveal">Cada granja graba <span class="grad">localmente.</span></h2>
+  <div class="flow reveal">
+    <div class="node"><span class="ic">📹</span><b>Cámaras PoE</b><small>bullet · domo · PTZ</small></div><div class="link"></div>
+    <div class="node"><span class="ic">🧬</span><b>Rostro + huella</b><small>entradas y salidas</small></div><div class="link"></div>
+    <div class="node"><span class="ic">🗄️</span><b>Gabinete de granja</b><small>NVR · disco · switch · no-break</small></div><div class="link"></div>
+    <div class="node"><span class="ic">🛰️</span><b>Starlink</b><small>internet satelital</small></div><div class="link"></div>
+    <div class="node" style="border-color:var(--cy)"><span class="ic">🖥️</span><b>Centro de control</b><small>celular y computadora</small></div>
+  </div>
+  <div class="stats">
+    <div class="card reveal"><b>Si falla el internet</b><p class="mut" style="margin-top:6px">el video sigue grabándose en la granja.</p></div>
+    <div class="card reveal"><b>Por Starlink viaja poco</b><p class="mut" style="margin-top:6px">alertas, estado de equipos y el video que pidas ver.</p></div>
+    <div class="card reveal"><b>Crece contigo</b><p class="mut" style="margin-top:6px">puedes empezar con una granja piloto y sumar el resto.</p></div>
+  </div>
+</section>
+
+<section id="props">
+  <div class="kick reveal">Propuestas</div>
+  <h2 class="reveal">Elige el nivel de <span class="grad">control.</span></h2>
+  <div class="tabs reveal" id="mode1"></div><div class="tabs reveal" id="tabs"></div>
+  <div id="panels"></div>
+</section>
+
+<section id="equipo">
+  <div class="kick reveal">Equipo</div>
+  <h2 class="reveal">Lo que se instala en <span class="grad">cada granja.</span></h2>
+  <div class="tabs" id="mode2"></div><div class="tabs" id="tabs2"></div>
+  <div class="eq" id="eq"></div>
+  <p class="mut" style="margin-top:20px;font-size:13px">Precios con IVA consultados el 13/10/2026 (Cyberpuerta y Mercado Libre, según la variante). Con compra por volumen vía distribuidor se espera mejorar el precio.</p>
+</section>
+
+<section id="camaras">
+  <div class="kick reveal">Comparativo de cámaras</div>
+  <h2 class="reveal">Tipos de cámara y <span class="grad">dónde usar cada una</span></h2>
+  <div class="card reveal" style="padding:10px 20px;overflow:auto"><table id="cam"><thead><tr><th></th><th>Bullet</th><th>Bullet económica</th><th>Domo</th><th>Domo económica</th><th>PTZ</th><th>PTZ económica</th><th>Alta resolución</th></tr></thead><tbody><tr><td>Imagen</td><td><img src="assets/img/camara_bullet.png" class="ti"></td><td><img src="assets/img/e_bullet.png" class="ti"></td><td><img src="assets/img/camara_domo.png" class="ti"></td><td><img src="assets/img/e_domo.png" class="ti"></td><td><img src="assets/img/camara_ptz.png" class="ti"></td><td><img src="assets/img/e_ptz.png" class="ti"></td><td>—</td></tr><tr><td>Modelo</td><td>Hikvision DS-2CD1T47G3-LIUF/LSL</td><td>HiLook IPC-B141H-C</td><td>Hikvision DS-2CD1143G2-LIU(F)</td><td>HiLook IPC-D141H-C</td><td>Hikvision DS-2DE2A204IW-DE3</td><td>Hikvision DS-2DE2C400MWG-E</td><td>Hikvision DS-2CD2T123G2-2LI2UY</td></tr><tr><td>Resolución</td><td>4 MP (2560×1440)</td><td>4 MP</td><td>4 MP (2560×1440)</td><td>4 MP</td><td>1080p (Full HD)</td><td>4 MP (2560×1440)</td><td>4608×2592 (≈12 MP)</td></tr><tr><td>Instalación</td><td>Interior / exterior</td><td>Exterior</td><td>Interior / exterior, IP67</td><td>Interior / exterior</td><td>Exterior</td><td>Exterior</td><td>Exterior</td></tr><tr><td>Uso recomendado</td><td>Perímetro, accesos y fachadas</td><td>Perímetro, accesos y fachadas</td><td>Naves, bodegas, oficinas y patios</td><td>Naves, bodegas, oficinas y patios</td><td>Patios y áreas amplias</td><td>Patios y áreas amplias</td><td>Puntos críticos con más detalle</td></tr><tr><td>Características</td><td>PoE, día/noche</td><td>PoE, ONVIF (según listado)</td><td>H.265, PoE, WDR, micrófono, detección de movimiento</td><td>PoE, ONVIF (según listado)</td><td>Giro y zoom a distancia</td><td>Listada como PTZ; confirmar zoom óptico</td><td>Mayor detalle por cámara</td></tr><tr><td>Se compra en</td><td>Cyberpuerta</td><td>Mercado Libre</td><td>Cyberpuerta</td><td>Mercado Libre</td><td>Cyberpuerta</td><td>Cyberpuerta</td><td>Cyberpuerta</td></tr><tr><td>Precio unitario</td><td><span class="y">$3,479</span></td><td><span class="y">$980</span></td><td><span class="y">$2,379</span></td><td><span class="y">$1,034</span></td><td><span class="y">$3,019</span></td><td><span class="y">$1,709</span></td><td><span class="y">$5,279</span></td></tr><tr><td>Liga</td><td><a href="https://www.cyberpuerta.mx/Seguridad-y-Vigilancia/Camaras-y-Sistemas-de-Vigilancia/Camaras-de-Seguridad-IP/Hikvision-Camara-de-Seguridad-IP-Bullet-para-Interiores-Exteriores-DS-2CD1T47G3-LIUF-LSL-Alambrico-2560-x-1440-Pixeles-Dia-Noche.html" target="_blank">Ver ↗</a></td><td><a href="https://www.mercadolibre.com.mx/up/MLMU3550373638" target="_blank">Ver ↗</a></td><td><a href="https://www.cyberpuerta.mx/Seguridad-y-Vigilancia/Camaras-y-Sistemas-de-Vigilancia/Camaras-de-Seguridad-IP/Hikvision-Camara-de-Seguridad-IP-Domo-IR-para-Interiores-Exteriores-DS-2CD1143G2-LIU-F-Alambrico-2560-x-1440-Pixeles-Dia-Noche.html" target="_blank">Ver ↗</a></td><td><a href="https://www.mercadolibre.com.mx/p/MLM46138712" target="_blank">Ver ↗</a></td><td><a href="https://www.cyberpuerta.mx/Seguridad-y-Vigilancia/Camaras-y-Sistemas-de-Vigilancia/Camaras-de-Seguridad-IP/Hikvision-Camara-de-Seguridad-IP-PTZ-IR-para-Exteriores-DS-2DE2A204IW-DE3-S6-Alambrico-1920x1080-Full-HD-Dia-Noche.html" target="_blank">Ver ↗</a></td><td><a href="https://www.cyberpuerta.mx/Seguridad-y-Vigilancia/Camaras-y-Sistemas-de-Vigilancia/Camaras-de-Seguridad-IP/Hikvision-Camara-de-Seguridad-IP-PTZ-IR-para-Exteriores-DS-2DE2C400MWG-E-Alambrico-2560-x-1440-Pixeles-Dia-Noche.html" target="_blank">Ver ↗</a></td><td><a href="https://www.cyberpuerta.mx/Seguridad-y-Vigilancia/Camaras-y-Sistemas-de-Vigilancia/Camaras-de-Seguridad-IP/Hikvision-Camara-de-Seguridad-IP-Bullet-para-Exteriores-DS-2CD2T123G2-2LI2UY-Alambrico-4608-x-2592-Dia-Noche.html" target="_blank">Ver ↗</a></td></tr></tbody></table></div>
+  <p class="mut" style="margin-top:16px;font-size:13px">Las versiones "económicas" son de la línea HiLook de Hikvision o de menor gama. Especificaciones tomadas de los listados de Cyberpuerta y Mercado Libre; deben validarse con el distribuidor antes de la compra. Para detección de intrusos, conteo de personas o lectura de placas se requieren modelos con analítica, que se cotizan por separado.</p>
+</section>
+
+<section id="prov">
+  <div class="kick reveal">Proveedores</div>
+  <h2 class="reveal">Dónde conviene comprar <span class="grad">cada equipo</span></h2>
+  <div class="card reveal" style="padding:10px 20px;overflow:auto"><table id="prv">
+    <thead><tr><th>Equipo</th><th>Cyberpuerta</th><th>Mercado Libre</th><th>Amazon MX</th><th>Mejor precio</th><th>Ahorro por unidad</th></tr></thead>
+    <tbody>
+      <tr><td>Cámara bullet 4MP</td><td>$3,479<small>Hikvision DS-2CD1T47G3</small></td><td class="y">$980<small>HiLook IPC-B141H-C</small></td><td>—</td><td>Mercado Libre</td><td class="y">$2,499</td></tr>
+      <tr><td>Cámara domo 4MP</td><td>$2,379<small>Hikvision DS-2CD1143G2</small></td><td class="y">$1,034<small>HiLook IPC-D141H-C</small></td><td>—</td><td>Mercado Libre</td><td class="y">$1,345</td></tr>
+      <tr><td>Cámara PTZ</td><td class="y">$1,709<small>DS-2DE2C400MWG-E (4MP)</small><small>vs. $3,019 DS-2DE2A204IW-DE3</small></td><td>—</td><td>—</td><td>Cyberpuerta</td><td class="y">$1,310</td></tr>
+      <tr><td>NVR 16 canales con PoE</td><td>$9,129<small>DS-7616NXI-K2/16P(E)</small></td><td class="y">$5,921<small>DS-7616NI-Q2/16P</small></td><td>≈ $5,500*<small>DS-7616NI-Q2/16P</small></td><td>Mercado Libre</td><td class="y">$3,208</td></tr>
+      <tr><td>Disco 8 TB videovigilancia</td><td class="y">$7,729<small>WD Purple Pro WD8002PURP</small></td><td>desde $8,899<small>WD Purple Pro</small></td><td>—</td><td>Cyberpuerta</td><td class="y">$1,170</td></tr>
+      <tr><td>No-break 1500 VA</td><td>$6,869<small>CyberPower CP1500PFCLCDA</small></td><td class="y">$2,965<small>Epcom EPU1500LCD</small></td><td>—</td><td>Mercado Libre</td><td class="y">$3,904</td></tr>
+      <tr><td>Switch PoE+ 16 puertos</td><td class="y">$3,249<small>TP-Link TL-SG1218MPE</small></td><td>—</td><td>$3,889<small>TL-SG1218MPE</small></td><td>Cyberpuerta</td><td class="y">$640</td></tr>
+      <tr><td>Terminal rostro + huella</td><td class="y">$2,639<small>ZKTeco MB360</small></td><td>$3,795<small>ZKTeco MB160</small></td><td>—</td><td>Cyberpuerta</td><td class="y">$1,156</td></tr>
+    </tbody></table></div>
+  <p class="mut" style="margin-top:16px;font-size:13px">Precios consultados el 13/10/2026. En Mercado Libre el precio varía según el vendedor: para una empresa conviene exigir factura y garantía del distribuidor autorizado. * Dato de búsqueda en Amazon, sin verificar en la ficha. Syscom y otros mayoristas piden cuenta para mostrar precios y no se pudieron consultar: se recomienda cotizar por volumen con ellos, porque 10 granjas es una compra considerable.</p>
+</section>
+
+<section id="demo">
+  <div class="kick reveal">Página de prueba</div>
+  <h2 class="reveal">Así se ve <span class="grad">el centro de control.</span></h2>
+  <div class="demo reveal">
+    <div class="bar"><i></i><i></i><i></i><span style="margin-left:10px">Demo interactiva · datos simulados · prueba las pestañas de arriba</span></div>
+    <iframe src="assets/demo.html" title="Demo del centro de control"></iframe>
+  </div>
+</section>
+
+<section id="comp">
+  <div class="kick reveal">Comparativa</div>
+  <h2 class="reveal">Las tres, <span class="grad">lado a lado.</span></h2>
+  <div class="card reveal" style="padding:10px 20px;overflow:auto"><table id="cmp"></table></div><p class="mut" id="cmpnote" style="margin-top:12px;font-size:13px"></p>
+</section>
+
+<section id="calc">
+  <div class="kick reveal">Calculadora</div>
+  <h2 class="reveal">Arma tu <span class="grad">inversión.</span></h2>
+  <div class="calc">
+    <div class="card reveal">
+      <b>Propuesta</b><div class="sel" id="csel"></div>
+      <b>Número de granjas: <span id="nf" style="color:var(--cy)">10</span></b>
+      <input type="range" id="rng" min="1" max="10" value="10">
+      <label style="display:flex;gap:10px;align-items:center;margin-top:18px;color:var(--mut)"><input type="checkbox" id="chk" checked style="width:20px;height:20px;accent-color:var(--cy)"> Incluir internet Starlink (equipo)</label>
+    </div>
+    <div class="card reveal">
+      <div class="mut">Inversión total estimada</div>
+      <div class="out grad" id="tot">$0</div>
+      <div class="rows" id="brk"></div>
+      <p class="mut" style="margin-top:14px;font-size:13px">Incluye equipo con IVA y conceptos estimados (mano de obra, material, cerraduras, sensores). Se afina con el levantamiento en sitio.</p>
+    </div>
+  </div>
+</section>
+
+<section id="plan">
+  <div class="kick reveal">Implementación</div>
+  <h2 class="reveal">De cero a operando en <span class="grad">8–12 semanas.</span></h2>
+  <div class="tl">
+    <div class="card reveal"><div class="n">1</div><b>Levantamiento</b><p class="mut">Visita a granjas: distancias, energía, puntos de cámara y accesos.</p><div class="w">1–2 semanas</div></div>
+    <div class="card reveal"><div class="n">2</div><b>Compra y preparación</b><p class="mut">Pedido de equipo y configuración previa en taller.</p><div class="w">1–2 semanas</div></div>
+    <div class="card reveal"><div class="n">3</div><b>Granja piloto</b><p class="mut">Instalación completa en una granja, ajustes y aprobación.</p><div class="w">1 semana</div></div>
+    <div class="card reveal"><div class="n">4</div><b>Despliegue</b><p class="mut">Resto de granjas, de una en una o por parejas.</p><div class="w">4–6 semanas</div></div>
+    <div class="card reveal"><div class="n">5</div><b>Capacitación y entrega</b><p class="mut">Manuales, capacitación a seguridad y RH, soporte inicial.</p><div class="w">1 semana</div></div>
+  </div>
+  <div class="stats" style="margin-top:34px">
+    <div class="card reveal"><b>🔐 Datos biométricos</b><p class="mut" style="margin-top:6px">Huella y rostro son datos sensibles (LFPDPPP): aviso de privacidad y consentimiento de cada empleado.</p></div>
+    <div class="card reveal"><b>🛠️ Mantenimiento</b><p class="mut" style="margin-top:6px">Recomendado contrato mensual: revisión de equipos, respaldos y soporte.</p></div>
+    <div class="card reveal"><b>📌 Siguiente paso</b><p class="mut" style="margin-top:6px">Elegir propuesta y agendar el levantamiento con una granja piloto.</p></div>
+  </div>
+</section>
+<footer>Super Pollo · Propuesta de seguridad y videovigilancia · Octubre 2026 · Precios de lista, sujetos a cambio</footer>
+
+<script>
+const DATA={"prod": {"camara_bullet": {"n": "Cámara IP bullet 4MP exterior", "m": "Hikvision DS-2CD1T47G3-LIUF/LSL", "p": 3479.0, "u": "https://www.cyberpuerta.mx/Seguridad-y-Vigilancia/Camaras-y-Sistemas-de-Vigilancia/Camaras-de-Seguridad-IP/Hikvision-Camara-de-Seguridad-IP-Bullet-para-Interiores-Exteriores-DS-2CD1T47G3-LIUF-LSL-Alambrico-2560-x-1440-Pixeles-Dia-Noche.html"}, "camara_domo": {"n": "Cámara IP domo IR 4MP", "m": "Hikvision DS-2CD1143G2-LIU(F)", "p": 2379.0, "u": "https://www.cyberpuerta.mx/Seguridad-y-Vigilancia/Camaras-y-Sistemas-de-Vigilancia/Camaras-de-Seguridad-IP/Hikvision-Camara-de-Seguridad-IP-Domo-IR-para-Interiores-Exteriores-DS-2CD1143G2-LIU-F-Alambrico-2560-x-1440-Pixeles-Dia-Noche.html"}, "camara_ptz": {"n": "Cámara PTZ exterior 1080p", "m": "Hikvision DS-2DE2A204IW-DE3", "p": 3019.0, "u": "https://www.cyberpuerta.mx/Seguridad-y-Vigilancia/Camaras-y-Sistemas-de-Vigilancia/Camaras-de-Seguridad-IP/Hikvision-Camara-de-Seguridad-IP-PTZ-IR-para-Exteriores-DS-2DE2A204IW-DE3-S6-Alambrico-1920x1080-Full-HD-Dia-Noche.html"}, "nvr": {"n": "NVR 16 canales con PoE", "m": "Hikvision DS-7616NXI-K2/16P(E)", "p": 9129.0, "u": "https://www.cyberpuerta.mx/Seguridad-y-Vigilancia/Camaras-y-Sistemas-de-Vigilancia/Grabadoras-de-Video-en-Red-NVR/Hikvision-NVR-de-16-Canales-DS-7616NXI-K2-16P-E-para-2-Discos-Duros-max-32TB-2-x-USB-2-0-17-x-RJ-45.html"}, "disco": {"n": "Disco duro videovigilancia 8 TB", "m": "WD Purple Pro WD8002PURP", "p": 7729.0, "u": "https://www.cyberpuerta.mx/Computo-Hardware/Discos-Duros-SSD-NAS/Discos-Duros-para-Videovigilancia/Disco-Duro-para-Videovigilancia-Western-Digital-WD-Purple-Pro-3-5-8TB-SATA-6-Gbit-s-256MB-Cache.html"}, "ups": {"n": "No-break 1500 VA", "m": "CyberPower CP1500PFCLCDA", "p": 6869.0, "u": "https://www.cyberpuerta.mx/Energia/Proteccion-Contra-Descargas/No-Break-UPS/No-Break-UPS/No-Break-CyberPower-CP1500PFCLCDA-Linea-interactiva-1000W-1500VA-Entrada-88-144V-Salida-120V-12-Contactos.html"}, "gabinete": {"n": "Gabinete de pared 12U", "m": "WAM WAM-WC12UR06-A", "p": 3319.0, "u": "https://www.cyberpuerta.mx/Computo-Hardware/Servidores/Accesorios-para-Servidores/Racks-y-Gabinetes/WAM-Gabinete-de-Pared-12U-Negro.html"}, "cable": {"n": "Bobina cable UTP Cat6 305 m", "m": "LinkedPRO PRO-CAT-6/W", "p": 1339.0, "u": "https://www.cyberpuerta.mx/Computo-Hardware/Cables/Bobinas/Bobinas-de-Cable-Ethernet/LinkedPRO-Bobina-de-Cable-Ethernet-Cat6-UTP-305-Metros-4.html"}, "switch_poe": {"n": "Switch PoE+ 16 puertos", "m": "TP-Link TL-SG1218MPE", "p": 3249.0, "u": "https://www.cyberpuerta.mx/Computo-Hardware/Redes/Switches/Switch-TP-Link-Gigabit-Ethernet-JetStream-16-Puertos-PoE-10-100-1000Mbps-36Gbit-s-8000-Entradas-Administrable.html"}, "term_face_fp": {"n": "Terminal rostro + huella", "m": "ZKTeco MB360", "p": 2639.0, "u": "https://www.cyberpuerta.mx/Seguridad-y-Vigilancia/Control-de-Acceso/Control-de-Acceso-y-Asistencia-Biometrico/ZKTeco-Control-de-Acceso-y-Asistencia-Biometrico-MB360-1500-Rostros-2000-Huellas-USB-TCP-IP-3.html"}}, "prodE": {"camara_bullet": {"n": "Cámara IP bullet 4MP exterior", "m": "HiLook IPC-B141H-C", "p": 980.0, "u": "https://www.mercadolibre.com.mx/up/MLMU3550373638", "s": "Mercado Libre", "i": "e_bullet"}, "camara_domo": {"n": "Cámara IP domo 4MP", "m": "HiLook IPC-D141H-C", "p": 1034.0, "u": "https://www.mercadolibre.com.mx/p/MLM46138712", "s": "Mercado Libre", "i": "e_domo"}, "camara_ptz": {"n": "Cámara PTZ exterior 4MP", "m": "Hikvision DS-2DE2C400MWG-E", "p": 1709.0, "u": "https://www.cyberpuerta.mx/Seguridad-y-Vigilancia/Camaras-y-Sistemas-de-Vigilancia/Camaras-de-Seguridad-IP/Hikvision-Camara-de-Seguridad-IP-PTZ-IR-para-Exteriores-DS-2DE2C400MWG-E-Alambrico-2560-x-1440-Pixeles-Dia-Noche.html", "s": "Cyberpuerta", "i": "e_ptz"}, "nvr": {"n": "NVR 16 canales con PoE", "m": "Hikvision DS-7616NI-Q2/16P", "p": 5921.0, "u": "https://www.mercadolibre.com.mx/p/MLM44123394", "s": "Mercado Libre", "i": "e_nvr"}, "disco": {"n": "Disco duro videovigilancia 8 TB", "m": "WD Purple Pro WD8002PURP", "p": 7729.0, "u": "https://www.cyberpuerta.mx/Computo-Hardware/Discos-Duros-SSD-NAS/Discos-Duros-para-Videovigilancia/Disco-Duro-para-Videovigilancia-Western-Digital-WD-Purple-Pro-3-5-8TB-SATA-6-Gbit-s-256MB-Cache.html", "s": "Cyberpuerta"}, "ups": {"n": "No-break 1500 VA", "m": "Epcom EPU1500LCD", "p": 2965.0, "u": "https://www.mercadolibre.com.mx/p/MLM9690447", "s": "Mercado Libre", "i": "e_ups"}, "gabinete": {"n": "Gabinete de pared 12U", "m": "WAM WAM-WC12UR06-A", "p": 3319.0, "u": "https://www.cyberpuerta.mx/Computo-Hardware/Servidores/Accesorios-para-Servidores/Racks-y-Gabinetes/WAM-Gabinete-de-Pared-12U-Negro.html", "s": "Cyberpuerta"}, "cable": {"n": "Bobina cable UTP Cat6 305 m", "m": "LinkedPRO PRO-CAT-6/W", "p": 1339.0, "u": "https://www.cyberpuerta.mx/Computo-Hardware/Cables/Bobinas/Bobinas-de-Cable-Ethernet/LinkedPRO-Bobina-de-Cable-Ethernet-Cat6-UTP-305-Metros-4.html", "s": "Cyberpuerta"}, "switch_poe": {"n": "Switch PoE+ 16 puertos", "m": "TP-Link TL-SG1218MPE", "p": 3249.0, "u": "https://www.cyberpuerta.mx/Computo-Hardware/Redes/Switches/Switch-TP-Link-Gigabit-Ethernet-JetStream-16-Puertos-PoE-10-100-1000Mbps-36Gbit-s-8000-Entradas-Administrable.html", "s": "Cyberpuerta"}, "term_face_fp": {"n": "Terminal rostro + huella", "m": "ZKTeco MB360", "p": 2639.0, "u": "https://www.cyberpuerta.mx/Seguridad-y-Vigilancia/Control-de-Acceso/Control-de-Acceso-y-Asistencia-Biometrico/ZKTeco-Control-de-Acceso-y-Asistencia-Biometrico-MB360-1500-Rostros-2000-Huellas-USB-TCP-IP-3.html", "s": "Cyberpuerta"}}, "props": [{"id": 1, "name": "Básica", "sub": "Videovigilancia", "cams": 10, "items": [["camara_bullet", 6], ["camara_domo", 4], ["nvr", 1], ["disco", 1], ["ups", 1], ["gabinete", 1], ["cable", 2]], "equipo": 60114.0, "est": [["Material de instalación", 6000], ["Mano de obra e instalación", 12000]], "inc": ["10 cámaras fijas 4MP por granja (6 bullet + 4 domo)", "NVR local de 16 canales con PoE y disco de 8 TB", "No-break, gabinete y cableado", "Acceso remoto en vivo y a grabaciones", "Instalación, configuración y capacitación"], "no": "control de acceso biométrico y tablero central."}, {"id": 2, "name": "Recomendada", "sub": "Video + control de acceso", "cams": 10, "items": [["camara_bullet", 6], ["camara_domo", 4], ["nvr", 1], ["disco", 1], ["ups", 1], ["gabinete", 1], ["cable", 2], ["switch_poe", 1], ["term_face_fp", 4]], "equipo": 73919.0, "est": [["Material de instalación", 9000], ["Cerraduras, botones y fuentes (2 accesos)", 7000], ["Mano de obra, enrolamiento y config.", 22000]], "inc": ["Todo lo de la Básica", "4 terminales rostro + huella (entrada y salida)", "Horarios por turno y registro de accesos", "Cerraduras electromagnéticas en 2 accesos", "Switch PoE para terminales y enlace a Starlink", "Enrolamiento de empleados y capacitación"], "no": "tablero central, PTZ, sensores y torniquetes."}, {"id": 3, "name": "Completa", "sub": "Video + acceso + sensores + tablero", "cams": 14, "items": [["camara_bullet", 8], ["camara_domo", 4], ["camara_ptz", 2], ["nvr", 1], ["disco", 2], ["ups", 1], ["gabinete", 1], ["cable", 3], ["switch_poe", 1], ["term_face_fp", 6]], "equipo": 101261.0, "once": 80000, "est": [["Material de instalación", 12000], ["Cerraduras, botones y fuentes (3 accesos)", 10500], ["Sensores IoT (puerta, energía, clima)", 8000], ["Mano de obra, enrolamiento y config.", 30000]], "inc": ["14 cámaras por granja (8 bullet, 4 domo, 2 PTZ)", "6 terminales rostro + huella en 3 accesos", "Sensores de puerta, energía y temperatura/humedad", "Tablero central de las 10 granjas con mapa y alertas", "2 discos de 8 TB: más de 100 días de grabación", "Alertas al celular"], "no": "torniquetes y enlaces de radio entre granjas."}]};
+const $=s=>document.querySelector(s),money=n=>"$"+Math.round(n).toLocaleString("es-MX");
+const COL={1:"#2fe3a1",2:"#ffb938",3:"#ff4757"};
+const tabs=$("#tabs"),panels=$("#panels"),tabs2=$("#tabs2");
+let M="S",curEq=1,curP=1;
+const PR=()=>M=="E"?DATA.prodE:DATA.prod;
+const eq=p=>p.items.reduce((a,it)=>a+PR()[it[0]].p*it[1],0);
+const farmTotal=p=>eq(p)+p.est.reduce((a,b)=>a+b[1],0);
+const grand=p=>farmTotal(p)*10+(p.once||0);
+function tabBtn(p,fn){const b=document.createElement("div");b.className="tab"+(p.id==1?" on":"");b.style.setProperty("--c",COL[p.id]);b.innerHTML=`${p.id}. ${p.name}<small>${p.sub}</small>`;b.onclick=()=>fn(p.id);return b}
+function modeBar(el){el.innerHTML=`<span class="mut" style="align-self:center;margin-right:6px">Variante de compra:</span><div class="tab ${M=='S'?'on':''}" style="--c:#7fa8e8" data-m="S">Estándar<small>Cyberpuerta (referencia)</small></div><div class="tab ${M=='E'?'on':''}" style="--c:#4cb88a" data-m="E">Económica<small>Mejor precio entre proveedores</small></div>`;el.querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>setMode(b.dataset.m))}
+DATA.props.forEach(p=>{tabs.appendChild(tabBtn(p,selProp));tabs2.appendChild(tabBtn(p,selEq))});
+function renderPanels(){panels.innerHTML="";DATA.props.forEach(p=>{
+  const d=document.createElement("div");d.className="panel"+(p.id==curP?" on":"");d.id="p"+p.id;d.style.setProperty("--c",COL[p.id]);
+  d.innerHTML=`<div class="card"><div>${p.id==2?'<span class="badge">RECOMENDADA</span>':''}</div><div class="mut">Propuesta ${p.id} · ${p.sub} · variante ${M=="E"?"económica":"estándar"}</div><div class="price" data-t="${grand(p)}">$0</div><div class="mut">10 granjas · ${money(farmTotal(p))} por granja (sin internet)</div>
+  <div class="rows"><div><span>Equipo por granja (IVA incl.)</span><span>${money(eq(p))}</span></div>${p.est.map(e=>`<div><span>${e[0]} *</span><span>${money(e[1])}</span></div>`).join("")}${p.once?`<div><span>Tablero central (desarrollo único) *</span><span>${money(p.once)}</span></div>`:""}<div class="t"><span>Total proyecto</span><span>${money(grand(p))}</span></div></div></div>
+  <div class="card"><b style="font-size:20px">Qué incluye</b><ul class="ck">${p.inc.map(i=>`<li>${i}</li>`).join("")}</ul>${p.no?`<p class="mut" style="margin-top:16px;font-size:14px"><b>No incluye:</b> ${p.no}</p>`:""}</div>`;
+  panels.appendChild(d)})}
+function selProp(id){curP=id;document.querySelectorAll("#tabs .tab").forEach((t,i)=>t.classList.toggle("on",i+1==id));document.querySelectorAll(".panel").forEach(x=>x.classList.toggle("on",x.id=="p"+id));countAll()}
+function selEq(id){curEq=id;document.querySelectorAll("#tabs2 .tab").forEach((t,i)=>t.classList.toggle("on",i+1==id));const p=DATA.props[id-1];$("#eq").innerHTML=p.items.map(it=>{const k=PR()[it[0]];return `<div class="card reveal in"><div class="im"><img src="assets/img/${k.i||it[0]}.png" alt=""></div><h4>${k.n}<span class="qty">× ${it[1]}</span></h4><small>${k.m}</small><div class="pr"><b>${money(k.p)}</b><a href="${k.u}" target="_blank" rel="noopener">Ver en ${k.s||"Cyberpuerta"} ↗</a></div></div>`}).join("")}
+const feats=[["Cámaras por granja",p=>p.cams],["Grabación local (NVR + disco)",()=>"✓"],["Acceso remoto desde celular",()=>"✓"],["Control de acceso rostro + huella",p=>p.id>=2?"✓":"—"],["Horarios y turnos",p=>p.id>=2?"✓":"—"],["Cámaras PTZ",p=>p.id==3?"✓":"—"],["Sensores (puerta, energía, clima)",p=>p.id==3?"✓":"—"],["Tablero central de las 10 granjas",p=>p.id==3?"✓":"—"],["Días de grabación aprox.",p=>p.id==3?"100+":"60–80"],["Inversión por granja",p=>money(farmTotal(p))],["Inversión 10 granjas",p=>money(grand(p))]];
+function renderCmp(){$("#cmp").innerHTML="<thead><tr><th></th>"+DATA.props.map(p=>`<th class="${p.id==2?'rec':''}">${p.name}${p.id==2?' ⭐':''}</th>`).join("")+"</tr></thead><tbody>"+feats.map(f=>`<tr><td>${f[0]}</td>`+DATA.props.map(p=>{const v=f[1](p);return `<td class="${p.id==2?'rec ':''}${v=="✓"?'y':v=="—"?'n':''}">${v}</td>`}).join("")+"</tr>").join("")+"</tbody>";
+ $("#cmpnote").textContent="Cifras con la variante "+(M=="E"?"económica":"estándar")+"; cámbiala en las secciones Propuestas o Equipo."}
+let cp=2;const csel=$("#csel");DATA.props.forEach(p=>{const b=document.createElement("button");b.textContent=p.id+". "+p.name;b.className=p.id==cp?"on":"";b.onclick=()=>{cp=p.id;[...csel.children].forEach((x,i)=>x.classList.toggle("on",i+1==cp));calc()};csel.appendChild(b)});
+let shown=0;function calc(){const p=DATA.props[cp-1],n=+$("#rng").value;$("#nf").textContent=n;const base=farmTotal(p)*n,once=p.once||0,sl=$("#chk").checked?8500*n:0,tot=base+once+sl;
+ $("#brk").innerHTML=`<div><span>${n} granja(s) × ${money(farmTotal(p))} (${M=="E"?"económica":"estándar"})</span><span>${money(base)}</span></div>${once?`<div><span>Tablero central (único)</span><span>${money(once)}</span></div>`:""}${sl?`<div><span>Equipos Starlink</span><span>${money(sl)}</span></div>`:""}<div class="t"><span>Mensualidad Starlink (aprox.)</span><span>${money(1175*n)}/mes</span></div>`;
+ const o=$("#tot"),from=shown,t0=performance.now();(function f(t){const k=Math.min(1,(t-t0)/600);o.textContent=money(from+(tot-from)*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(f);else shown=tot})(t0)}
+function setMode(m){M=m;modeBar($("#mode1"));modeBar($("#mode2"));renderPanels();selEq(curEq);renderCmp();calc();countAll()}
+$("#rng").oninput=calc;$("#chk").onchange=calc;setMode("S");if(location.search.includes("mode=E"))setMode("E");
+// conteo + reveal
+function countAll(){document.querySelectorAll(".price").forEach(e=>{if(!e.offsetParent)return;const t=+e.dataset.t,t0=performance.now();(function f(n){const k=Math.min(1,(n-t0)/900);e.textContent=money(t*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(f)})(t0)})}
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");const c=e.target.querySelector("[data-n]");if(c&&!c.done){c.done=1;const t=+c.dataset.n,t0=performance.now();(function f(n){const k=Math.min(1,(n-t0)/1200);c.textContent=(c.dataset.p||"")+Math.round(t*k).toLocaleString("es-MX");if(k<1)requestAnimationFrame(f)})(t0)}if(e.target.id=="props")countAll()}}),{threshold:.2});
+document.querySelectorAll(".reveal,#props").forEach(e=>io.observe(e));
+// nav activo
+const links=[...document.querySelectorAll("#nav a")],secs=links.map(a=>document.querySelector(a.getAttribute("href")));
+addEventListener("scroll",()=>{let c=0;secs.forEach((s,i)=>{if(s.getBoundingClientRect().top<innerHeight*.4)c=i});links.forEach((a,i)=>a.classList.toggle("on",i==c))});
+// fondo de red
+const cv=$("#bg"),cx=cv.getContext("2d");let W,H,pts=[];function rs(){W=cv.width=innerWidth;H=cv.height=innerHeight;pts=Array.from({length:Math.min(90,W/16|0)},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35}))}rs();addEventListener("resize",rs);
+let mx=-999,my=-999;addEventListener("mousemove",e=>{mx=e.clientX;my=e.clientY});
+(function a(){cx.clearRect(0,0,W,H);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;cx.fillStyle="rgba(127,168,232,.45)";cx.fillRect(p.x,p.y,2,2)});
+ for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const d=Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y);if(d<140){cx.strokeStyle=`rgba(61,107,255,${.12*(1-d/140)})`;cx.beginPath();cx.moveTo(pts[i].x,pts[i].y);cx.lineTo(pts[j].x,pts[j].y);cx.stroke()}}
+ pts.forEach(p=>{const d=Math.hypot(p.x-mx,p.y-my);if(d<170){cx.strokeStyle=`rgba(127,168,232,${.25*(1-d/170)})`;cx.beginPath();cx.moveTo(p.x,p.y);cx.lineTo(mx,my);cx.stroke()}});requestAnimationFrame(a)})();
+if(location.search.includes('all=1')){document.querySelectorAll('.reveal').forEach(e=>e.classList.add('in'));const s=document.createElement('style');s.textContent='section{min-height:0!important}';document.head.appendChild(s);countAll();document.querySelectorAll('[data-n]').forEach(c=>c.textContent=(c.dataset.p||'')+(+c.dataset.n).toLocaleString('es-MX'))}
+</script>
+</body>
+</html>
+
+
+
+
+
