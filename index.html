@@ -94,7 +94,30 @@ input[type=range]{width:100%;accent-color:var(--cy);height:30px}
 .tl .card{position:relative}.tl .n{width:38px;height:38px;border-radius:50%;background:var(--blue);display:grid;place-items:center;font-weight:800;margin-bottom:12px}
 .tl .w{color:var(--ok);font-weight:700;margin-top:10px;font-size:14px}
 #prv td.y small{color:var(--mut);font-weight:400}#prv td small{display:block;color:var(--mut);font-size:12px;margin-top:2px}#prv td,#prv th{text-align:left}#cam th,#cam td{min-width:130px}.ti{height:90px;background:#fff;border-radius:8px;padding:4px}#cam td{vertical-align:middle;font-size:15px}#cam a{color:var(--cy)}#cam thead th{color:var(--txt)!important}#cam td:not(:first-child){text-align:center}footer{position:relative;z-index:1;text-align:center;padding:40px;color:var(--mut);font-size:13px;border-top:1px solid var(--line)}
-@media(max-width:900px){.panel.on,.calc{grid-template-columns:1fr}.link{width:2px;height:34px}.link:after{display:none}.flow{flex-direction:column}header nav{display:none}}
+@media(max-width:900px){.panel.on,.calc{grid-template-columns:1fr}.link{width:2px;height:34px}.link:after{display:none}.flow{flex-direction:column;align-items:stretch}.node{min-width:0}
+header{flex-wrap:wrap;gap:6px 12px;padding:8px 4vw}header img{height:34px}
+header nav{display:flex;margin-left:0;width:100%;overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+header nav::-webkit-scrollbar{display:none}header nav a{white-space:nowrap;padding:6px 11px;font-size:13px}
+section{padding:112px 5vw 48px;min-height:0}
+}
+@media(max-width:700px){
+body{font-size:15px}
+h1{font-size:clamp(26px,8vw,34px)}h2{font-size:clamp(22px,6.4vw,28px);margin-bottom:18px}
+p.lead{font-size:16px}.kick{font-size:11px;letter-spacing:.2em}
+.cta{width:100%;justify-content:center}
+.stats{grid-template-columns:1fr 1fr;gap:12px}.card{padding:16px}.big{font-size:30px}
+.tabs{gap:8px}.tab{flex:1 1 calc(50% - 8px);padding:10px 12px;font-size:14px}.tab small{font-size:11px}
+#mode1 .mut,#mode2 .mut{flex:1 1 100%;margin:0 0 2px}
+.price{font-size:36px}.rows div{font-size:14px}ul.ck li{font-size:15px}
+.eq{grid-template-columns:1fr 1fr;gap:12px}.eq .card{padding:12px}.eq .im{height:96px}.eq .im img{max-height:86px}.eq h4{font-size:14px}.eq .pr{flex-direction:column;align-items:flex-start;gap:4px}.eq .pr b{font-size:17px}
+table{min-width:560px}#cam{min-width:980px}#prv{min-width:760px}th,td{padding:10px 10px;font-size:14px}
+.demo iframe{height:82vh}.out{font-size:34px}
+.tl{grid-template-columns:1fr}
+.sel button{flex:1 1 100%}
+.hscroll{display:block!important}
+footer{padding:26px 16px;font-size:12px}
+}
+.hscroll{display:none;color:var(--mut);font-size:12px;margin:6px 0 0}
 </style>
 </head>
 <body>
@@ -163,7 +186,7 @@ input[type=range]{width:100%;accent-color:var(--cy);height:30px}
   <div class="kick reveal">Comparativo de cámaras</div>
   <h2 class="reveal">Tipos de cámara y <span class="grad">dónde usar cada una</span></h2>
   <div class="card reveal" style="padding:10px 20px;overflow:auto"><table id="cam"><thead><tr><th></th><th>Bullet</th><th>Bullet económica</th><th>Domo</th><th>Domo económica</th><th>PTZ</th><th>PTZ económica</th><th>Alta resolución</th></tr></thead><tbody><tr><td>Imagen</td><td><img src="assets/img/camara_bullet.png" class="ti"></td><td><img src="assets/img/e_bullet.png" class="ti"></td><td><img src="assets/img/camara_domo.png" class="ti"></td><td><img src="assets/img/e_domo.png" class="ti"></td><td><img src="assets/img/camara_ptz.png" class="ti"></td><td><img src="assets/img/e_ptz.png" class="ti"></td><td>—</td></tr><tr><td>Modelo</td><td>Hikvision DS-2CD1T47G3-LIUF/LSL</td><td>HiLook IPC-B141H-C</td><td>Hikvision DS-2CD1143G2-LIU(F)</td><td>HiLook IPC-D141H-C</td><td>Hikvision DS-2DE2A204IW-DE3</td><td>Hikvision DS-2DE2C400MWG-E</td><td>Hikvision DS-2CD2T123G2-2LI2UY</td></tr><tr><td>Resolución</td><td>4 MP (2560×1440)</td><td>4 MP</td><td>4 MP (2560×1440)</td><td>4 MP</td><td>1080p (Full HD)</td><td>4 MP (2560×1440)</td><td>4608×2592 (≈12 MP)</td></tr><tr><td>Instalación</td><td>Interior / exterior</td><td>Exterior</td><td>Interior / exterior, IP67</td><td>Interior / exterior</td><td>Exterior</td><td>Exterior</td><td>Exterior</td></tr><tr><td>Uso recomendado</td><td>Perímetro, accesos y fachadas</td><td>Perímetro, accesos y fachadas</td><td>Naves, bodegas, oficinas y patios</td><td>Naves, bodegas, oficinas y patios</td><td>Patios y áreas amplias</td><td>Patios y áreas amplias</td><td>Puntos críticos con más detalle</td></tr><tr><td>Características</td><td>PoE, día/noche</td><td>PoE, ONVIF (según listado)</td><td>H.265, PoE, WDR, micrófono, detección de movimiento</td><td>PoE, ONVIF (según listado)</td><td>Giro y zoom a distancia</td><td>Listada como PTZ; confirmar zoom óptico</td><td>Mayor detalle por cámara</td></tr><tr><td>Se compra en</td><td>Cyberpuerta</td><td>Mercado Libre</td><td>Cyberpuerta</td><td>Mercado Libre</td><td>Cyberpuerta</td><td>Cyberpuerta</td><td>Cyberpuerta</td></tr><tr><td>Precio unitario</td><td><span class="y">$3,479</span></td><td><span class="y">$980</span></td><td><span class="y">$2,379</span></td><td><span class="y">$1,034</span></td><td><span class="y">$3,019</span></td><td><span class="y">$1,709</span></td><td><span class="y">$5,279</span></td></tr><tr><td>Liga</td><td><a href="https://www.cyberpuerta.mx/Seguridad-y-Vigilancia/Camaras-y-Sistemas-de-Vigilancia/Camaras-de-Seguridad-IP/Hikvision-Camara-de-Seguridad-IP-Bullet-para-Interiores-Exteriores-DS-2CD1T47G3-LIUF-LSL-Alambrico-2560-x-1440-Pixeles-Dia-Noche.html" target="_blank">Ver ↗</a></td><td><a href="https://www.mercadolibre.com.mx/up/MLMU3550373638" target="_blank">Ver ↗</a></td><td><a href="https://www.cyberpuerta.mx/Seguridad-y-Vigilancia/Camaras-y-Sistemas-de-Vigilancia/Camaras-de-Seguridad-IP/Hikvision-Camara-de-Seguridad-IP-Domo-IR-para-Interiores-Exteriores-DS-2CD1143G2-LIU-F-Alambrico-2560-x-1440-Pixeles-Dia-Noche.html" target="_blank">Ver ↗</a></td><td><a href="https://www.mercadolibre.com.mx/p/MLM46138712" target="_blank">Ver ↗</a></td><td><a href="https://www.cyberpuerta.mx/Seguridad-y-Vigilancia/Camaras-y-Sistemas-de-Vigilancia/Camaras-de-Seguridad-IP/Hikvision-Camara-de-Seguridad-IP-PTZ-IR-para-Exteriores-DS-2DE2A204IW-DE3-S6-Alambrico-1920x1080-Full-HD-Dia-Noche.html" target="_blank">Ver ↗</a></td><td><a href="https://www.cyberpuerta.mx/Seguridad-y-Vigilancia/Camaras-y-Sistemas-de-Vigilancia/Camaras-de-Seguridad-IP/Hikvision-Camara-de-Seguridad-IP-PTZ-IR-para-Exteriores-DS-2DE2C400MWG-E-Alambrico-2560-x-1440-Pixeles-Dia-Noche.html" target="_blank">Ver ↗</a></td><td><a href="https://www.cyberpuerta.mx/Seguridad-y-Vigilancia/Camaras-y-Sistemas-de-Vigilancia/Camaras-de-Seguridad-IP/Hikvision-Camara-de-Seguridad-IP-Bullet-para-Exteriores-DS-2CD2T123G2-2LI2UY-Alambrico-4608-x-2592-Dia-Noche.html" target="_blank">Ver ↗</a></td></tr></tbody></table></div>
-  <p class="mut" style="margin-top:16px;font-size:13px">Las versiones "económicas" son de la línea HiLook de Hikvision o de menor gama. Especificaciones tomadas de los listados de Cyberpuerta y Mercado Libre; deben validarse con el distribuidor antes de la compra. Para detección de intrusos, conteo de personas o lectura de placas se requieren modelos con analítica, que se cotizan por separado.</p>
+  <p class="hscroll">← desliza la tabla →</p><p class="mut" style="margin-top:16px;font-size:13px">Las versiones "económicas" son de la línea HiLook de Hikvision o de menor gama. Especificaciones tomadas de los listados de Cyberpuerta y Mercado Libre; deben validarse con el distribuidor antes de la compra. Para detección de intrusos, conteo de personas o lectura de placas se requieren modelos con analítica, que se cotizan por separado.</p>
 </section>
 
 <section id="prov">
@@ -181,7 +204,7 @@ input[type=range]{width:100%;accent-color:var(--cy);height:30px}
       <tr><td>Switch PoE+ 16 puertos</td><td class="y">$3,249<small>TP-Link TL-SG1218MPE</small></td><td>—</td><td>$3,889<small>TL-SG1218MPE</small></td><td>Cyberpuerta</td><td class="y">$640</td></tr>
       <tr><td>Terminal rostro + huella</td><td class="y">$2,639<small>ZKTeco MB360</small></td><td>$3,795<small>ZKTeco MB160</small></td><td>—</td><td>Cyberpuerta</td><td class="y">$1,156</td></tr>
     </tbody></table></div>
-  <p class="mut" style="margin-top:16px;font-size:13px">Precios consultados el 13/10/2026. En Mercado Libre el precio varía según el vendedor: para una empresa conviene exigir factura y garantía del distribuidor autorizado. * Dato de búsqueda en Amazon, sin verificar en la ficha. Syscom y otros mayoristas piden cuenta para mostrar precios y no se pudieron consultar: se recomienda cotizar por volumen con ellos, porque 10 granjas es una compra considerable.</p>
+  <p class="hscroll">← desliza la tabla →</p><p class="mut" style="margin-top:16px;font-size:13px">Precios consultados el 13/10/2026. En Mercado Libre el precio varía según el vendedor: para una empresa conviene exigir factura y garantía del distribuidor autorizado. * Dato de búsqueda en Amazon, sin verificar en la ficha. Syscom y otros mayoristas piden cuenta para mostrar precios y no se pudieron consultar: se recomienda cotizar por volumen con ellos, porque 10 granjas es una compra considerable.</p>
 </section>
 
 <section id="demo">
@@ -196,7 +219,7 @@ input[type=range]{width:100%;accent-color:var(--cy);height:30px}
 <section id="comp">
   <div class="kick reveal">Comparativa</div>
   <h2 class="reveal">Las tres, <span class="grad">lado a lado.</span></h2>
-  <div class="card reveal" style="padding:10px 20px;overflow:auto"><table id="cmp"></table></div><p class="mut" id="cmpnote" style="margin-top:12px;font-size:13px"></p>
+  <div class="card reveal" style="padding:10px 20px;overflow:auto"><table id="cmp"></table></div><p class="hscroll">← desliza la tabla →</p><p class="mut" id="cmpnote" style="margin-top:12px;font-size:13px"></p>
 </section>
 
 <section id="calc">

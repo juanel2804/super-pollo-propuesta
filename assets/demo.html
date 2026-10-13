@@ -57,6 +57,19 @@ td{padding:10px 12px;border-bottom:1px solid var(--line)}
 .sens{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:10px}
 .sens div{background:var(--panel2);border-radius:10px;padding:12px}
 .sens small{color:var(--mut);font-size:12px}.sens b{display:block;font-size:22px;margin-top:4px}
+@media(max-width:900px){
+body{height:auto;min-height:100vh;overflow:auto}
+header{flex-wrap:wrap;padding:10px 14px;gap:8px}header nav{margin-left:0;width:100%;overflow-x:auto}nav button{white-space:nowrap}
+.right{margin-left:0;font-size:12px;flex-wrap:wrap;gap:10px}
+.kpis{grid-template-columns:repeat(2,1fr);padding:10px 14px 0;gap:8px}.kpi{padding:10px 12px}.kpi b{font-size:20px}
+main{display:flex;flex-direction:column;padding:10px 14px 16px}
+.card{min-height:0}
+#farms{display:flex;overflow-x:auto;gap:4px}.farm{white-space:nowrap;flex:none}
+.grid{grid-template-columns:repeat(2,1fr);grid-template-rows:none}.cam{aspect-ratio:16/9}.cam .tag{font-size:9px;max-width:70%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.cam .ts{font-size:9px}.cam .rec{font-size:0;gap:0;padding:3px 5px}
+.sens{grid-template-columns:repeat(2,1fr)}
+.pad{overflow-x:auto}table{min-width:520px}
+.logo{font-size:15px}.logo span{display:none}
+}
 </style>
 </head>
 <body>
@@ -177,4 +190,5 @@ if(location.hash){const b=document.querySelector(`nav button[data-v="${location.
 </script>
 </body>
 </html>
+
 
