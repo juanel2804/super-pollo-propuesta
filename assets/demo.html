@@ -79,7 +79,6 @@ main{display:flex;flex-direction:column;padding:10px 14px 16px}
   <nav>
     <button class="on" data-v="v1">Videovigilancia</button>
     <button data-v="v2">Control de acceso</button>
-    <button data-v="v3">Sensores</button>
   </nav>
   <div class="right"><span><span class="dot"></span>Sistema en línea</span><span id="clock"></span><span>👤 Admin · Seguridad</span></div>
 </header>
@@ -108,19 +107,6 @@ main{display:flex;flex-direction:column;padding:10px 14px 16px}
       <div class="pad"><table>
         <thead><tr><th>Hora</th><th>Empleado</th><th>Área</th><th>Huella</th><th>Rostro</th><th>Resultado</th></tr></thead>
         <tbody id="acc"></tbody></table></div>
-    </div>
-    <div class="view" id="v3">
-      <h3>Sensores de la granja</h3>
-      <div class="sens">
-        <div><small>Temperatura nave 1</small><b>26.4 °C</b></div>
-        <div><small>Humedad nave 1</small><b>58 %</b></div>
-        <div><small>Puerta principal</small><b class="ok">Cerrada</b></div>
-        <div><small>Energía</small><b class="ok">Red CFE</b></div>
-        <div><small>Temperatura nave 2</small><b>27.1 °C</b></div>
-        <div><small>Humedad nave 2</small><b>61 %</b></div>
-        <div><small>Puerta bodega</small><b class="warn">Abierta 4 min</b></div>
-        <div><small>UPS</small><b class="ok">100 %</b></div>
-      </div>
     </div>
   </div>
 
@@ -167,10 +153,10 @@ cams[5].el.classList.add('alert');
 // events
 const evs=[
  ['r','🚨','Intrusión · Perímetro sur','Granja Apan · CAM 03 · hace 2 min'],
- ['y','🚪','Puerta bodega abierta > 4 min','Granja Ixmiquilpan · hace 9 min'],
+ ['y','📷','Cámara sin señal > 3 min','Granja Ixmiquilpan · CAM 05 · hace 9 min'],
  ['r','🪪','Acceso denegado · fuera de turno','Granja Tula · Acceso principal · hace 14 min'],
  ['g','✅','Cámara reconectada','Granja Huichapan · CAM 07 · hace 31 min'],
- ['y','🔌','Cambio a UPS (falla de energía 3 min)','Granja Zimapán · hace 52 min'],
+ ['y','🧬','Rostro no coincide con la huella','Granja Zimapán · Nave 2 · hace 52 min'],
  ['r','🧍','Persona detectada fuera de horario','Granja Tulancingo · CAM 02 · hace 1 h']
 ];
 const E=document.getElementById('evs');evs.forEach(e=>{const d=document.createElement('div');d.className='ev';d.innerHTML=`<div class="i ${e[0]}">${e[1]}</div><div><b>${e[2]}</b><small>${e[3]}</small></div>`;E.appendChild(d)});
