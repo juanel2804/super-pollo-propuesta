@@ -94,6 +94,22 @@ input[type=range]{width:100%;accent-color:var(--cy);height:30px}
 .tl .card{position:relative}.tl .n{width:38px;height:38px;border-radius:50%;background:var(--blue);display:grid;place-items:center;font-weight:800;margin-bottom:12px}
 .tl .w{color:var(--ok);font-weight:700;margin-top:10px;font-size:14px}
 #prv td.y small{color:var(--mut);font-weight:400}#prv td small{display:block;color:var(--mut);font-size:12px;margin-top:2px}#prv td,#prv th{text-align:left}#cam th,#cam td{min-width:130px}.ti{height:90px;background:#fff;border-radius:8px;padding:4px}#cam td{vertical-align:middle;font-size:15px}#cam a{color:var(--cy)}#cam thead th{color:var(--txt)!important}#cam td:not(:first-child){text-align:center}footer{position:relative;z-index:1;text-align:center;padding:40px;color:var(--mut);font-size:13px;border-top:1px solid var(--line)}
+.calc2{display:grid;grid-template-columns:1.25fr 1fr;gap:22px;align-items:start}.sticky{position:sticky;top:96px}
+.step{font-weight:700;margin:20px 0 8px;font-size:15px}.step:first-child{margin-top:0}
+.it{display:grid;grid-template-columns:1fr auto 96px;gap:10px;align-items:center;padding:9px 0;border-bottom:1px dashed var(--line)}
+.it .nm b{display:block;font-size:14px}.it .nm small{color:var(--mut);font-size:12px}
+.st{display:flex;align-items:center;gap:4px}.st button{width:32px;height:32px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:#fff;font-size:18px;cursor:pointer;line-height:1}
+.st button:hover{border-color:var(--cy)}
+.st input,.money input{background:rgba(255,255,255,.06);border:1px solid var(--line);color:#fff;border-radius:8px;height:32px;font-size:15px;text-align:center}
+.st input{width:54px}.sub{text-align:right;color:var(--ok);font-weight:700;font-size:14px}
+.es{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0;border-bottom:1px dashed var(--line);font-size:14px;color:var(--txt)}
+.money{display:flex;align-items:center;gap:4px;flex:none}.money i{font-style:normal;color:var(--mut)}.money input{width:104px;text-align:right;padding:0 8px}
+.rst{margin-top:18px;padding:10px 16px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--mut);cursor:pointer;font-size:14px}.rst:hover{color:#fff;border-color:var(--cy)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 6px}.chips span{padding:4px 12px;border-radius:20px;background:rgba(255,255,255,.07);font-size:13px;color:var(--mut)}.chips b{color:var(--txt)}
+#lines div{font-size:14px}#lines small{color:var(--mut);margin-left:6px}
+input[type=number]{-moz-appearance:textfield}input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+@media(max-width:900px){.calc2{grid-template-columns:1fr}.sticky{position:static}}
+@media(max-width:700px){.it{grid-template-columns:1fr auto}.it .sub{grid-column:1/-1;text-align:left}.es{flex-direction:column;align-items:flex-start;gap:6px}.money{width:100%}.money input{flex:1}}
 @media(max-width:900px){.panel.on,.calc{grid-template-columns:1fr}.link{width:2px;height:34px}.link:after{display:none}.flow{flex-direction:column;align-items:stretch}.node{min-width:0}
 header{flex-wrap:wrap;gap:6px 12px;padding:8px 4vw}header img{height:34px}
 header nav{display:flex;margin-left:0;width:100%;overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none}
@@ -225,18 +241,31 @@ footer{padding:26px 16px;font-size:12px}
 <section id="calc">
   <div class="kick reveal">Calculadora</div>
   <h2 class="reveal">Arma tu <span class="grad">inversión.</span></h2>
-  <div class="calc">
+  <p class="lead reveal" style="margin:0 0 22px">Elige una propuesta como base y cambia las cantidades de cada equipo, los conceptos estimados y el número de granjas para ver el costo real.</p>
+  <div class="calc2">
     <div class="card reveal">
-      <b>Propuesta</b><div class="sel" id="csel"></div>
-      <b>Número de granjas: <span id="nf" style="color:var(--cy)">10</span></b>
+      <div class="step">1 · Propuesta base</div><div class="sel" id="csel"></div>
+      <div class="step">2 · Variante de compra</div><div class="tabs" id="mode3" style="margin-bottom:6px"></div>
+      <div class="step">3 · Número de granjas: <span id="nf" style="color:var(--cy)">10</span></div>
       <input type="range" id="rng" min="1" max="10" value="10">
-      <label style="display:flex;gap:10px;align-items:center;margin-top:18px;color:var(--mut)"><input type="checkbox" id="chk" checked style="width:20px;height:20px;accent-color:var(--cy)"> Incluir internet Starlink (equipo)</label>
+      <div class="step">4 · Equipo por granja <span class="mut" style="font-weight:400">(usa − y + o escribe la cantidad)</span></div>
+      <div id="items"></div>
+      <div class="step">5 · Conceptos estimados por granja <span class="mut" style="font-weight:400">(editables)</span></div>
+      <div id="ests"></div>
+      <div class="step">6 · Otros conceptos</div>
+      <div class="es"><label for="onc">Tablero central (desarrollo único) *</label><span class="money"><i>$</i><input type="number" id="onc" min="0" step="1000"></span></div>
+      <div class="es"><label for="chk" style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="chk" checked style="width:18px;height:18px;accent-color:var(--cy)"> Incluir Starlink (equipo por granja)</label><span class="money"><i>$</i><input type="number" id="slp" min="0" step="100" value="8500"></span></div>
+      <div class="es"><label for="slm">Starlink: mensualidad por granja</label><span class="money"><i>$</i><input type="number" id="slm" min="0" step="50" value="1175"></span></div>
+      <button class="rst" id="rst">Restablecer a la propuesta base</button>
     </div>
-    <div class="card reveal">
-      <div class="mut">Inversión total estimada</div>
+    <div class="card reveal sticky">
+      <div class="mut">Inversión total estimada (sin internet mensual)</div>
       <div class="out grad" id="tot">$0</div>
+      <div class="chips" id="chips"></div>
       <div class="rows" id="brk"></div>
-      <p class="mut" style="margin-top:14px;font-size:13px">Incluye equipo con IVA y conceptos estimados (mano de obra, material, cerraduras). Se afina con el levantamiento en sitio.</p>
+      <div class="mut" style="margin:16px 0 4px;font-size:13px;letter-spacing:.08em;text-transform:uppercase">Detalle de equipo (todas las granjas)</div>
+      <div class="rows" id="lines"></div>
+      <p class="mut" style="margin-top:14px;font-size:13px">Equipo con IVA según la variante elegida. Los conceptos con * son estimados y se afinan con el levantamiento en sitio.</p>
     </div>
   </div>
 </section>
@@ -283,12 +312,30 @@ function selEq(id){curEq=id;document.querySelectorAll("#tabs2 .tab").forEach((t,
 const feats=[["Cámaras por granja",p=>p.cams],["Grabación local (NVR + disco)",()=>"✓"],["Acceso remoto desde celular",()=>"✓"],["Control de acceso rostro + huella",p=>p.id>=2?"✓":"—"],["Horarios y turnos",p=>p.id>=2?"✓":"—"],["Cámaras PTZ",p=>p.id==3?"✓":"—"],["Tablero central de las 10 granjas",p=>p.id==3?"✓":"—"],["Días de grabación aprox.",p=>p.id==3?"100+":"60–80"],["Inversión por granja",p=>money(farmTotal(p))],["Inversión 10 granjas",p=>money(grand(p))]];
 function renderCmp(){$("#cmp").innerHTML="<thead><tr><th></th>"+DATA.props.map(p=>`<th class="${p.id==2?'rec':''}">${p.name}${p.id==2?' ⭐':''}</th>`).join("")+"</tr></thead><tbody>"+feats.map(f=>`<tr><td>${f[0]}</td>`+DATA.props.map(p=>{const v=f[1](p);return `<td class="${p.id==2?'rec ':''}${v=="✓"?'y':v=="—"?'n':''}">${v}</td>`}).join("")+"</tr>").join("")+"</tbody>";
  $("#cmpnote").textContent="Cifras con la variante "+(M=="E"?"económica":"estándar")+"; cámbiala en las secciones Propuestas o Equipo."}
-let cp=2;const csel=$("#csel");DATA.props.forEach(p=>{const b=document.createElement("button");b.textContent=p.id+". "+p.name;b.className=p.id==cp?"on":"";b.onclick=()=>{cp=p.id;[...csel.children].forEach((x,i)=>x.classList.toggle("on",i+1==cp));calc()};csel.appendChild(b)});
-let shown=0;function calc(){const p=DATA.props[cp-1],n=+$("#rng").value;$("#nf").textContent=n;const base=farmTotal(p)*n,once=p.once||0,sl=$("#chk").checked?8500*n:0,tot=base+once+sl;
- $("#brk").innerHTML=`<div><span>${n} granja(s) × ${money(farmTotal(p))} (${M=="E"?"económica":"estándar"})</span><span>${money(base)}</span></div>${once?`<div><span>Tablero central (único)</span><span>${money(once)}</span></div>`:""}${sl?`<div><span>Equipos Starlink</span><span>${money(sl)}</span></div>`:""}<div class="t"><span>Mensualidad Starlink (aprox.)</span><span>${money(1175*n)}/mes</span></div>`;
- const o=$("#tot"),from=shown,t0=performance.now();(function f(t){const k=Math.min(1,(t-t0)/600);o.textContent=money(from+(tot-from)*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(f);else shown=tot})(t0)}
-function setMode(m){M=m;modeBar($("#mode1"));modeBar($("#mode2"));renderPanels();selEq(curEq);renderCmp();calc();countAll()}
-$("#rng").oninput=calc;$("#chk").onchange=calc;setMode("S");if(location.search.includes("mode=E"))setMode("E");
+const KEYS=["camara_bullet","camara_domo","camara_ptz","nvr","disco","ups","gabinete","cable","switch_poe","term_face_fp"];
+let cp=2,NF=10,Q={},EST=[],shown=0;
+const csel=$("#csel");DATA.props.forEach(p=>{const b=document.createElement("button");b.textContent=p.id+". "+p.name;b.className=p.id==cp?"on":"";b.onclick=()=>loadPreset(p.id);csel.appendChild(b)});
+function loadPreset(id){cp=id;const p=DATA.props[id-1];Q={};KEYS.forEach(k=>Q[k]=0);p.items.forEach(it=>Q[it[0]]=it[1]);EST=p.est.map(e=>[e[0],e[1]]);$("#onc").value=p.once||0;[...csel.children].forEach((x,i)=>x.classList.toggle("on",i+1==id));buildCalc()}
+function setQ(k,v){v=Math.max(0,Math.min(999,Math.round(+v||0)));Q[k]=v;const i=document.querySelector('#items input[data-k="'+k+'"]');if(i&&+i.value!==v)i.value=v;calc()}
+function buildCalc(){
+ $("#items").innerHTML=KEYS.map(k=>{const q=PR()[k];return `<div class="it"><div class="nm"><b>${q.n}</b><small>${q.m} · ${money(q.p)} c/u · ${q.s||"Cyberpuerta"}</small></div><div class="st"><button data-d="-1" data-k="${k}">−</button><input type="number" min="0" max="999" data-k="${k}" value="${Q[k]}"><button data-d="1" data-k="${k}">+</button></div><div class="sub" id="s_${k}"></div></div>`}).join("");
+ $("#items").querySelectorAll("button").forEach(b=>b.onclick=()=>setQ(b.dataset.k,Q[b.dataset.k]+ +b.dataset.d));
+ $("#items").querySelectorAll("input").forEach(i=>i.oninput=()=>setQ(i.dataset.k,i.value));
+ $("#ests").innerHTML=EST.map((e,i)=>`<div class="es"><label>${e[0]} *</label><span class="money"><i>$</i><input type="number" min="0" step="500" data-e="${i}" value="${e[1]}"></span></div>`).join("");
+ $("#ests").querySelectorAll("input").forEach(i=>i.oninput=()=>{EST[+i.dataset.e][1]=+i.value||0;calc()});
+ calc()}
+function calc(){const n=NF,pr=PR();$("#nf").textContent=n;
+ let eqF=0,lines=[],cams=0,term=0;
+ KEYS.forEach(k=>{const q=Q[k],u=pr[k].p;$("#s_"+k)&&($("#s_"+k).textContent=q?money(u*q):"—");if(q>0){eqF+=u*q;lines.push([pr[k].n,q*n,u*q*n]);if(k.startsWith("camara"))cams+=q;if(k=="term_face_fp")term+=q}});
+ const estF=EST.reduce((a,e)=>a+(+e[1]||0),0),once=+$("#onc").value||0,slp=+$("#slp").value||0,slm=+$("#slm").value||0,sl=$("#chk").checked?slp*n:0,perFarm=eqF+estF,tot=perFarm*n+once+sl;
+ $("#chips").innerHTML=`<span><b>${cams*n}</b> cámaras</span><span><b>${term*n}</b> terminales biométricas</span><span><b>${money(perFarm)}</b> por granja</span>${cams?`<span><b>${money(perFarm/cams)}</b> por cámara</span>`:""}`;
+ $("#brk").innerHTML=`<div><span>Equipo (${n} granja${n>1?"s":""})</span><span>${money(eqF*n)}</span></div><div><span>Conceptos estimados *</span><span>${money(estF*n)}</span></div>${once?`<div><span>Tablero central (único) *</span><span>${money(once)}</span></div>`:""}${sl?`<div><span>Equipos Starlink</span><span>${money(sl)}</span></div>`:""}<div class="t"><span>Mensualidad Starlink (aprox.)</span><span>${$("#chk").checked?money(slm*n)+"/mes":"—"}</span></div>`;
+ $("#lines").innerHTML=lines.length?lines.map(l=>`<div><span>${l[0]}<small>× ${l[1]}</small></span><span>${money(l[2])}</span></div>`).join(""):'<div><span class="mut">Sin equipo seleccionado</span><span></span></div>';
+ const o=$("#tot"),from=shown,t0=performance.now();(function f(t){const k=Math.min(1,(t-t0)/450);o.textContent=money(from+(tot-from)*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(f);else shown=tot})(t0)}
+function setMode(m){M=m;modeBar($("#mode1"));modeBar($("#mode2"));modeBar($("#mode3"));renderPanels();selEq(curEq);renderCmp();buildCalc();countAll()}
+$("#rng").oninput=e=>{NF=+e.target.value;calc()};["chk","onc","slp","slm"].forEach(i=>$("#"+i).oninput=calc);$("#chk").onchange=calc;$("#rst").onclick=()=>loadPreset(cp);
+loadPreset(2);
+setMode("S");if(location.search.includes("mode=E"))setMode("E");
 // conteo + reveal
 function countAll(){document.querySelectorAll(".price").forEach(e=>{if(!e.offsetParent)return;const t=+e.dataset.t,t0=performance.now();(function f(n){const k=Math.min(1,(n-t0)/900);e.textContent=money(t*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(f)})(t0)})}
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");const c=e.target.querySelector("[data-n]");if(c&&!c.done){c.done=1;const t=+c.dataset.n,t0=performance.now();(function f(n){const k=Math.min(1,(n-t0)/1200);c.textContent=(c.dataset.p||"")+Math.round(t*k).toLocaleString("es-MX");if(k<1)requestAnimationFrame(f)})(t0)}if(e.target.id=="props")countAll()}}),{threshold:.2});
@@ -306,6 +353,7 @@ if(location.search.includes('all=1')){document.querySelectorAll('.reveal').forEa
 </script>
 </body>
 </html>
+
 
 
 
